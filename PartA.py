@@ -1,10 +1,20 @@
 import re
 import sys
 
-
 '''
-Method/Function: List<Token> tokenize(TextFilePath)
-Write a method/function that reads in a text file and returns a list of the tokens in that file. For the purposes of this project, a token is a sequence of alphanumeric characters, independent of capitalization (so Apple, apple, aPpLe are the same token). You are allowed to use regular expressions if you wish to (and you can use some regexp engine, no need to write it from scratch), but you are not allowed to import a tokenizer (e.g. from NLTK), since you are being asked to write a tokenizer.
+    This function tokenizes the content of a text file by reading it line by line, removing non-alphanumeric characters,
+    and converting the text to lowercase. Valid tokens (alphanumeric words) are extracted and returned as a list.
+
+    Runtime Complexity:
+    - Opening the file runs in constant time O(1).
+    - Reading each line in the file runs in O(n), where n is the number of lines in the file.
+    - For each line, the regular expression `re.findall(r'[a-zA-Z0-9]+', line.lower())` scans through the entire line, which has a time complexity of O(m), where m is the length of the line.
+    - The `extend()` function, which appends all tokens from the current line to the `tokens` list, runs in O(k), where k is the number of tokens in that line. Since tokens are proportional to the length of the line, this is at most O(m) for each line.
+    
+    Overall, if the file has a total length of `L` characters and `N` tokens, the complexity for tokenizing the entire file is O(L), where L is the total number of characters in the file (since we scan each character once).
+    
+    Therefore, the time complexity is linear with respect to the size of the input (O(L)), where L is total num of characters in the file.
+
 '''
 def tokenize(file_path):
     # init list of tokens
@@ -33,8 +43,17 @@ def tokenize(file_path):
 
 
 '''
-Method/Function:        Map<Token,Count> computeWordFrequencies(List<Token>)
-Write another method/function that counts the number of occurrences of each token in the token list. Remember that you should write this assignment yourself from scratch, so you are not allowed to import a counter when the assignment asks you to write that method.
+    This function computes the frequency of each word (token) in the given list of tokens and returns a dictionary
+    where the keys are the tokens and the values are the frequeencies of the tokens.
+
+    Time Complexity:
+    - The loop iterates through each token in the `tokens` list, which has `n` tokens.
+    - For each token, checking whether it exists in the `frequencies` dictionary takes O(1) time on average (the average time complexity of dict lookups).
+    - If the token is already in the dictionary, updating the frequency (`frequencies[token] += 1`) takes O(1) time.
+    - If the token is not in the dictionary, adding the token to the dictionary (`frequencies[token] = 1`) also takes O(1) time on average.
+
+    Overall, the function iterates over all tokens in the list once, performing constant-time operations for each token. Therefore, the time complexity is O(n), where `n` is the number of tokens in the `tokens` list.
+
 '''
 def computeWordFrequencies(tokens):
     # Init dictionary to store word frequencies
@@ -50,11 +69,23 @@ def computeWordFrequencies(tokens):
     return frequencies
 
 '''
-Method/Function:         void print(Frequencies<Token, Count>)
-Finally, write a method/function that prints out the word frequency count onto the screen. The printout should be ordered by decreasing frequency (so, the highest frequency words first; if necessary, order the cases of ties alphabetically). 
+    This function prints the frequencies of words sorted by count in descending order. 
+    In case of a tie, the words are sorted alphabetically in ascending order.
+
+    Time Complexity:
+    - Sorting the dictionary items using `sorted(frequencies.items(), key=lambda x: (-x[1], x[0]))`:
+        - The `items()` method generates a list of dictionary items, which takes O(n) time, where n is the number of entries in the dictionary.
+        - Sorting the list of items takes O(n log n) time, where n is the number of entries in the `frequencies` dictionary.
+        - The sorting key `lambda x: (-x[1], x[0])` involves comparing the counts (`x[1]`) and resolving ties by comparing the words (`x[0]`), each comparison taking constant time. Therefore, sorting takes O(n log n) time.
+    - Iterating over the sorted list to print the results:
+        - The loop iterates over each item in the sorted list, which has O(n) time complexity.
+        
+    Overall, the dominant operation is the sorting step, which is O(n log n). Therefore, the time complexity is O(n log n), where n is the number of entries in the `frequencies` dictionary.
+    
 '''
 def print_frequencies(frequencies):
-    # Sort the dictionary by value in descending order
+    # Sort the dictionary by value in descending order (which is why x[1] is negated)
+    # In case of a tie with counts, we resort to second value in the tuple which is x[0], sorting the words by alphabetic order
     sorted_frequencies = sorted(frequencies.items(), key=lambda x: (-x[1], x[0]))
 
     # Print sorted frequencies
