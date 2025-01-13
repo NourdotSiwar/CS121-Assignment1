@@ -14,7 +14,7 @@ def tokenize(file_path):
         # Open file, read line by line
         with open(file_path, 'r', encoding='utf-8') as file:
             for line in file:
-                # Process each line by removing non-alphanumeric characters and splitting into words
+                # Process each line by removing non-alphanumeric characters 
                 # Convert to lowercase for case insensitivity
                 line_tokens = re.findall(r'[a-zA-Z0-9]+', line.lower())
 
@@ -29,12 +29,43 @@ def tokenize(file_path):
         print(f"Error reading file: {e}")
         sys.exit(1)  # Exit gracefully on error
 
-    print(f"tokens: {tokens}")
     return tokens
+
+
+'''
+Method/Function:        Map<Token,Count> computeWordFrequencies(List<Token>)
+Write another method/function that counts the number of occurrences of each token in the token list. Remember that you should write this assignment yourself from scratch, so you are not allowed to import a counter when the assignment asks you to write that method.
+'''
+def computeWordFrequencies(tokens):
+    # Init dictionary to store word frequencies
+    frequencies = {}
+
+    # Count the frequency of each word
+    for token in tokens:
+        if token in frequencies:
+                frequencies[token] += 1
+        else:
+                frequencies[token] = 1
+        
+    return frequencies
+
+'''
+Method/Function:         void print(Frequencies<Token, Count>)
+Finally, write a method/function that prints out the word frequency count onto the screen. The printout should be ordered by decreasing frequency (so, the highest frequency words first; if necessary, order the cases of ties alphabetically). 
+'''
+def print_frequencies(frequencies):
+    # Sort the dictionary by value in descending order
+    sorted_frequencies = sorted(frequencies.items(), key=lambda x: (-x[1], x[0]))
+
+    # Print sorted frequencies
+    for token, count in sorted_frequencies:
+        print(f"{token} - {count}")
+
+    return
 
 def main():
     if len(sys.argv) != 2:
-        print("Usage: python script.py <file_path>")
+        print("Usage command: python script.py <file_path>")
         sys.exit(1)  # Exit if the file path is not provided
 
     file_path = sys.argv[1]
@@ -43,26 +74,10 @@ def main():
     tokens = tokenize(file_path)
 
     # # Compute word frequencies
-    # frequencies = computeWordFrequencies(tokens)
+    frequencies = computeWordFrequencies(tokens)
 
     # # Print frequencies
-    # print_frequencies(frequencies)
+    print_frequencies(frequencies)
 
 if __name__ == "__main__":
     main()
-
-
-'''
-Method/Function:        Map<Token,Count> computeWordFrequencies(List<Token>)
-Write another method/function that counts the number of occurrences of each token in the token list. Remember that you should write this assignment yourself from scratch, so you are not allowed to import a counter when the assignment asks you to write that method.
-'''
-def computeWordFrequencies(tokens):
-    
-
-'''
-Method/Function:         void print(Frequencies<Token, Count>)
-Finally, write a method/function that prints out the word frequency count onto the screen. The printout should be ordered by decreasing frequency (so, the highest frequency words first; if necessary, order the cases of ties alphabetically). 
-'''
-def print(frequencies):
-    pass
-
