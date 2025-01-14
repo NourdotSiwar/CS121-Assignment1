@@ -42,6 +42,14 @@ def findCommonTokens(file_path1, file_path2):
     # print number of tokens they have in common
     print(common_tokens)
 
+def validate_file(file_path):
+    try:
+        with open(file_path, "r") as file:
+            return True
+    except Exception as e:
+        print(f"Error reading file: {e}")
+        return False
+    
 
 def main():
     if len(sys.argv) != 3:
@@ -50,6 +58,17 @@ def main():
 
     file_path1 = sys.argv[1]
     file_path2 = sys.argv[2]
+
+    # validate file 1
+    if not validate_file(file_path1):
+        print("Invalid file path provided.")
+        sys.exit(1)  # Exit if the file is invalid
+
+    if not validate_file(file_path2):
+        print("Invalid file path provided.")
+        sys.exit(1)
+    
+
 
     findCommonTokens(file_path1, file_path2)
 

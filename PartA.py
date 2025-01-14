@@ -94,12 +94,25 @@ def print_frequencies(frequencies):
 
     return
 
+def validate_file(file_path):
+    try:
+        with open(file_path, 'r', encoding='utf-8') as file:
+            return True
+    except Exception as e:
+        return False
+    
+    
 def main():
     if len(sys.argv) != 2:
         print("Usage command: python script.py <file_path>")
         sys.exit(1)  # Exit if the file path is not provided
 
     file_path = sys.argv[1]
+
+    # validate file
+    if not validate_file(file_path):
+        print("Invalid file path provided.")
+        sys.exit(1)  # Exit if the file is invalid
 
     # Tokenize the file
     tokens = tokenize(file_path)
